@@ -110,4 +110,12 @@ db.inventory.updateMany({status : 'D'}, { $set: { status: 'Done' }});
 
 // Delete
 
-db.inventory.drop() // DELETE FROM users;
+//  deleteOne - видалити один запис
+//  deleteMany - видалити кілька
+
+db.inventory.drop() // DELETE FROM inventory;
+db.inventory.deleteMany(); // DELETE FROM inventory;
+
+// DELETE FROM users WHERE email IS NULL;
+// всі документи юзерів, у яких немає емейлу
+db.users.deleteMany({ email : {$exists : false}}); 
