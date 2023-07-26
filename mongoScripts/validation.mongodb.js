@@ -61,3 +61,33 @@ db.movies.insertOne({data: 'test'});
 db.movies.insertOne({title: 'Test',});
 db.movies.insertOne({title: 'Test',yearOfRelease: 33500});
 db.movies.insertOne({title: 'Test',yearOfRelease: 2014,movieMaker : {} });
+
+/*
+  Створити дві таблички з валідацією
+
+  Таблиця 1 - Виробники
+  має мати поля:
+    - назва виробника
+    - адреса виробника
+    - email
+  Поле назви має бути обов'язковим
+
+  Таблиця 2 - Товари
+  має мати поля:
+    - назва
+    - ціна
+    - кількість на складі
+    - виробник (objectId)
+  Мають завжди бути поля
+    - назва
+    - виробник
+
+  db.insertMany([
+    {
+      name: '123sadsadsa',
+      price: 2334232,
+      amount: 21323,
+      manufacturerId : new objectId('64c001c4e0d5cbef4365eb7f')
+    }
+  ])
+*/
