@@ -177,3 +177,117 @@ db.manufacturers.aggregate([
     $limit: 4, // LIMIT
   },
 ]);
+
+/*
+  Створити коллекції Компаній та Співробітників
+
+  - порахувати всіх співробітників кожної компанії
+
+  - отримати одну компанію та всіх її співробітників ($match)
+*/
+
+db.createCollection('companies', {
+  validator: {
+    $jsonSchema: {
+      bsonType: 'object',
+      required: ['name'],
+      properties: {
+        name: {
+          bsonType: 'string'
+        }
+      }
+    }
+  }
+});
+
+db.createCollection('workers', {
+  validator: {
+    $jsonSchema: {
+      bsonType: 'object',
+      required: ['fullName', 'companyId'],
+      properties: {
+        fullName: {
+          bsonType: 'string'
+        },
+        companyId: {
+          bsonType: 'objectId'
+        }
+      }
+    }
+  }
+});
+
+db.companies.insertMany([
+  {
+    name: 'MicroSoft'
+  },
+  {
+    name: 'Apple'
+  },
+  {
+    name: 'Google'
+  },
+]);
+
+db.workers.insertMany([
+  {
+    fullName: 'Worker 1',
+    companyId: new ObjectId("64c2a82b1cacc6950876a6fc")
+  },
+  {
+    fullName: 'Worker 2',
+    companyId: new ObjectId("64c2a82b1cacc6950876a6fd")
+  },
+  {
+    fullName: 'Worker 3',
+    companyId: new ObjectId("64c2a82b1cacc6950876a6fe")
+  },
+  {
+    fullName: 'Worker 4',
+    companyId: new ObjectId("64c2a82b1cacc6950876a6fd")
+  },
+  {
+    fullName: 'Worker 5',
+    companyId: new ObjectId("64c2a82b1cacc6950876a6fc")
+  },
+])
+
+//  - порахувати всіх співробітників кожної компанії
+db.companies.aggregate([
+  {
+    $lookup: {
+      from: 'workers',
+      localField: '_id',
+      foreignField: 'companyId',
+      as: 'worker'
+    }
+  },
+  {
+    $unwind: '$worker'
+  },
+  {
+    $group: {
+      _id: '$name',
+      workers: {
+        $count: {}
+      }
+    }
+  }
+]);
+
+// - отримати одну компанію та всіх її співробітників ($match)
+db.companies.aggregate([
+  {
+    $match: {
+      name: "MicroSoft"
+    }
+  },
+  {
+    $lookup: {
+      from: 'workers',
+      localField: '_id',
+      foreignField: 'companyId',
+      as: 'workers'
+    }
+  }
+])
