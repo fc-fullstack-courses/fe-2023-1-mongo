@@ -99,3 +99,81 @@ db.products.insertMany([
     quantity: 287,
   },
 ]);
+/*
+{
+  $lookup:
+    {
+      from: <collection to join>,
+      localField: <field from the input documents>,
+      foreignField: <field from the documents of the "from" collection>,
+      as: <output array field>
+    }
+}
+*/
+
+// Отримати дані про кожен з продуктів з їх виробником
+db.products.aggregate([
+  {
+    // LEFT JOIN
+    $lookup: {
+      from: 'manufacturers', // назву таблиці яку треба джоініти
+      localField: 'manufacturerId', // поле з початкової таблиці
+      foreignField: '_id', // поле з під'єднуємої таблиці
+      as: 'manufacturer', // назву поля, в яке буде вставлено масив з результатами джоіну
+    },
+  },
+  {
+    // Розбирає масив, і створює по запису для кожного елемента масиву
+    $unwind: '$manufacturer',
+  },
+  {
+    // прибирає вказане поле або поля, якщо передати масиз з ії назвами
+    $unset: 'manufacturerId',
+  },
+]);
+
+// кількість унікальних товарів для кожного виробника
+
+db.manufacturers.aggregate([
+  {
+    $lookup: {
+      from: 'products',
+      localField: '_id',
+      foreignField: 'manufacturerId',
+      as: 'product',
+    },
+  },
+  {
+    $unset: 'product.manufacturerId',
+  },
+  {
+    $unwind: '$product',
+  },
+  // {
+  //   $group: {
+  //     _id: "$brandName",
+  //     totalProducts: {
+  //       $count: {}
+  //     }
+  //   }
+  // }
+  {
+    $group: {
+      _id: '$brandName',
+      totalProducts: {
+        $sum: 1,
+      },
+    },
+  },
+  {
+    $sort: {
+      _id: 1,
+    },
+  },
+  {
+    $skip: 0, // OFFSET
+  },
+  {
+    $limit: 4, // LIMIT
+  },
+]);
