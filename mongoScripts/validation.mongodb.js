@@ -87,7 +87,7 @@ db.movies.insertOne({title: 'Test',yearOfRelease: 2014,movieMaker : {} });
       name: '123sadsadsa',
       price: 2334232,
       amount: 21323,
-      manufacturerId : new objectId('64c001c4e0d5cbef4365eb7f')
+      manufacturerId : new ObjectId('64c001c4e0d5cbef4365eb7f')
     }
   ])
 */
