@@ -26,7 +26,7 @@ class UserController {
         params: { userId },
       } = req;
 
-      const user = await User.findById(userId);
+      const user = await User.findById(userId).select(['-password', '-__v']);
 
       if (!user) {
         throw createHttpError(404, 'User not found');
@@ -47,7 +47,7 @@ class UserController {
 
       const updatedUser = await User.findByIdAndUpdate(userId, body, {
         new: true,
-      });
+      }).select('-password -__v');
 
       if (!updatedUser) {
         throw createHttpError(404, 'User not found');
@@ -65,7 +65,10 @@ class UserController {
         params: { userId },
       } = req;
 
-      const deletedUser = await User.findByIdAndRemove(userId);
+      const deletedUser = await User.findByIdAndRemove(userId).select({
+        __v: 0,
+        password: 0,
+      });
 
       if (!deletedUser) {
         throw createHttpError(404, 'User not found');
