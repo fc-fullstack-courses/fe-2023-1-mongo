@@ -15,7 +15,9 @@ class UserController {
   }
 
   static async getUsers(req, res, next) {
-    const users = await User.find();
+    const users = await User.find().populate({
+      path: 'messages',
+    });
 
     res.send({ data: users });
   }

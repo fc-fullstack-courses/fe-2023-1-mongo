@@ -27,6 +27,7 @@ const userSchema = new Schema(
     password: { type: String, required: true },
     birthday: { type: Date, default: Date.now },
     isMale: { type: Boolean, default: true },
+    messages: [{ type: Schema.Types.ObjectId, ref: 'Message' }],
   },
   { timestamps: true }
 );
