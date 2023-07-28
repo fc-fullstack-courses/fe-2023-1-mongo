@@ -1,3 +1,4 @@
+const createHttpError = require('http-errors');
 const { User } = require('../models');
 
 class UserController {
@@ -20,36 +21,60 @@ class UserController {
   }
 
   static async getUser(req, res, next) {
-    const {
-      params: { userId },
-    } = req;
+    try {
+      const {
+        params: { userId },
+      } = req;
 
-    const user = await User.findById(userId);
+      const user = await User.findById(userId);
 
-    res.send({ data: user });
+      if (!user) {
+        throw createHttpError(404, 'User not found');
+      }
+
+      res.send({ data: user });
+    } catch (error) {
+      next(error);
+    }
   }
 
   static async updateUser(req, res, next) {
-    const {
-      params: { userId },
-      body,
-    } = req;
+    try {
+      const {
+        params: { userId },
+        body,
+      } = req;
 
-    const updatedUser = await User.findByIdAndUpdate(userId, body, {
-      new: true,
-    });
+      const updatedUser = await User.findByIdAndUpdate(userId, body, {
+        new: true,
+      });
 
-    res.send({ data: updatedUser });
+      if (!updatedUser) {
+        throw createHttpError(404, 'User not found');
+      }
+
+      res.send({ data: updatedUser });
+    } catch (error) {
+      next(error);
+    }
   }
 
   static async deleteUser(req, res, next) {
-    const {
-      params: { userId },
-    } = req;
+    try {
+      const {
+        params: { userId },
+      } = req;
 
-    const deletedUser = await User.findByIdAndRemove(userId);
+      const deletedUser = await User.findByIdAndRemove(userId);
 
-    res.send({ data: deletedUser });
+      if (!deletedUser) {
+        throw createHttpError(404, 'User not found');
+      }
+
+      res.send({ data: deletedUser });
+    } catch (error) {
+      next(error);
+    }
   }
 }
 
