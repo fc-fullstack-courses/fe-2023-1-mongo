@@ -1,9 +1,6 @@
 const createHttpError = require('http-errors');
-const jwt = require('jsonwebtoken');
-const { promisify } = require('util');
-const { User, Token } = require('../models');
-
-const signJWT = promisify(jwt.sign);
+const { User } = require('../models');
+const AuthService = require('../services/auth.service');
 
 class AuthController {
 
@@ -13,21 +10,9 @@ class AuthController {
 
       const user = await User.create(body);
 
-      // 1. зібрати дані користного навантаження для токену
-      const tokenPayload = {
-        firstName: user.firstName,
-        lastName: user.lastName,
-        id: user._id
-      }
+      const userWithToken = await AuthService.createSession(user);
 
-      // 2. генеруємо токен
-      const accessToken = await signJWT(tokenPayload, 'ddfdsfgfgfdsftgre', { expiresIn: 600 });
-
-      // 3. зберігаємо токен до БД
-      await Token.create({ token: accessToken, userId: user._id });
-
-      // 4. повертаємо токен разом з даними користувача
-      res.status(201).send({ data: { user, accessToken } });
+      res.status(201).send({ data: userWithToken });
     } catch (error) {
       next(error);
     }
@@ -48,19 +33,10 @@ class AuthController {
         return next(createHttpError(404, 'Email or password is invalid'));
       }
 
-      // 3. повторити логіку генерації токену з регістрації
-      const tokenPayload = {
-        firstName: user.firstName,
-        lastName: user.lastName,
-        id: user._id
-      }
-
-      const accessToken = await signJWT(tokenPayload, 'ddfdsfgfgfdsftgre', { expiresIn: 600 });
-
-      await Token.create({ token: accessToken, userId: user._id });
+      const userWithToken = await AuthService.createSession(user);
 
       // 3. надіслати дані користувача
-      res.send({ data: { user, accessToken } });
+      res.send({ data: userWithToken });
     } catch (error) {
       next(error);
     }
