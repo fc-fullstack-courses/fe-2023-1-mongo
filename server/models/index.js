@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const User = require('./User');
 const Message = require('./Message');
+const Token = require('./Token');
 
 async function connectToDB() {
   const USER_LOGIN = process.env.USER_LOGIN || 'admin';
@@ -19,3 +20,4 @@ connectToDB().catch((err) => console.log(err));
 
 module.exports.User = User;
 module.exports.Message = Message;
+module.exports.Token = Token;
