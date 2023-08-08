@@ -1,7 +1,16 @@
 import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { logout } from '../../redux/slices/authSlice';
 
 const Header = (props) => {
+  const { user } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+
+  const handleLogout = () => {
+    dispatch(logout());
+  };
+
   return (
     <header>
       <nav>
@@ -17,6 +26,8 @@ const Header = (props) => {
           </li>
         </ul>
       </nav>
+
+      {user && <button onClick={handleLogout}>Logout</button>}
     </header>
   );
 };
