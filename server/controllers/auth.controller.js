@@ -42,7 +42,13 @@ class AuthController {
     }
   }
 
-  static async refresh(req, res, next) { }
+  static async refresh(req, res, next) {
+    const { tokenData } = req;
+
+    const userWithToken = await AuthService.refreshSession(tokenData);
+
+    res.send({ data: userWithToken });
+  }
 }
 
 module.exports = AuthController;
