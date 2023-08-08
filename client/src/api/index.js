@@ -11,7 +11,7 @@ httpClient.interceptors.response.use(function (response) {
   const { data } = response;
 
   if (data?.data?.accessToken) {
-    localStorage.setItem('token', data.data.accessToken);
+    localStorage.setItem(CONSTANTS.TOKEN_STRING, data.data.accessToken);
   }
 
   return response;
@@ -24,7 +24,7 @@ httpClient.interceptors.response.use(function (response) {
 httpClient.interceptors.request.use(function (config) {
   // Do something before request is sent
 
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem(CONSTANTS.TOKEN_STRING);
 
   if (token) {
     config.headers['Authorization'] = `Bearer ${token}`;

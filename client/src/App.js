@@ -6,12 +6,13 @@ import RegistrationPage from './pages/Registration';
 import LoginPage from './pages/Login';
 import { useDispatch } from 'react-redux';
 import { refresh } from './redux/slices/authSlice';
+import CONSTANTS from './constants';
 
 function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem(CONSTANTS.TOKEN_STRING);
 
     if (token) {
       dispatch(refresh(token));

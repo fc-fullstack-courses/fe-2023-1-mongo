@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import * as API from '../../api';
+import CONSTANTS from '../../constants';
 
 const SLICE_NAME = 'auth';
 
@@ -40,7 +41,7 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     logout: (state) => {
-      localStorage.removeItem('token');
+      localStorage.removeItem(CONSTANTS.TOKEN_STRING);
       return initialState;
     }
   },
