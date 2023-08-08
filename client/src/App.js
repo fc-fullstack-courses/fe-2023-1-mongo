@@ -1,10 +1,23 @@
+import { useEffect } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import './App.css';
 import HomePage from './pages/Home';
 import RegistrationPage from './pages/Registration';
 import LoginPage from './pages/Login';
+import { useDispatch } from 'react-redux';
+import { refresh } from './redux/slices/authSlice';
 
 function App() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+
+    if (token) {
+      dispatch(refresh(token));
+    }
+  }, []);
+
   return (
     <Router>
       <Switch>
