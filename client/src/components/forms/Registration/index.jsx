@@ -1,5 +1,7 @@
 import React from 'react';
 import { Field, Form, Formik } from 'formik';
+import { useDispatch } from 'react-redux';
+import { registration } from '../../../redux/slices/authSlice';
 
 const initialValues = {
   firstName: '',
@@ -10,12 +12,15 @@ const initialValues = {
 };
 
 const RegistrationForm = () => {
+  const dispatch = useDispatch();
 
   const submitHandler = (values, formikBag) => {
     const newUser = {
       ...values,
       isMale: values.isMale === 'male',
     };
+
+    dispatch(registration(newUser));
     formikBag.resetForm();
   };
 

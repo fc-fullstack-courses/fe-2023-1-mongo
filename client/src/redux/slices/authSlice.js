@@ -30,6 +30,20 @@ const refresh = createAsyncThunk(
   }
 );
 
+const registration = createAsyncThunk(
+  `${SLICE_NAME}/registration`,
+  async (userData, thunkAPI) => {
+    try {
+      const { data: { data: { user } } } = await API.registration(userData);
+
+      return user;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+
+
 const initialState = {
   user: null,
   isLoading: false,
@@ -75,10 +89,25 @@ const authSlice = createSlice({
       state.isLoading = false;
       state.error = action.payload;
     });
+
+    builder.addCase(registration.pending, (state) => {
+      state.isLoading = true;
+      state.error = null;
+    });
+
+    builder.addCase(registration.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.user = action.payload;
+    });
+
+    builder.addCase(registration.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    });
   }
 });
 
 const { reducer: authReducer, actions } = authSlice;
-export { login, refresh };
+export { login, refresh, registration };
 export const { logout } = actions;
 export default authReducer;
