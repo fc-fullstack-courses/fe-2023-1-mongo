@@ -2,6 +2,7 @@ import { Field, Form, Formik } from 'formik';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllMessages } from '../../redux/slices/messagesSlice';
+import { sendMessage } from '../../api/ws';
 
 const initialValues = {
   body: '',
@@ -17,6 +18,13 @@ const Chat = (props) => {
   }, []);
 
   const submitHandler = (values, formikBag) => {
+    const newMessage = {
+      ...values,
+      author: user?._id
+    }
+
+    sendMessage(newMessage);
+    
     formikBag.resetForm();
   };
 
