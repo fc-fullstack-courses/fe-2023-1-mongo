@@ -7,6 +7,10 @@ const CONSTANTS = {
   DB_NAME: process.env.DB_NAME || 'chatDB',
   ACCESS_TOKEN_SECRET: process.env.ACCESS_TOKEN_SECRET,
   ACCESS_TOKEN_EXPIRES_IN: process.env.ACCESS_TOKEN_EXPIRES_IN,
+  SOCKET_EVENTS: {
+    NEW_MESSAGE: 'newMessage',
+    NEW_MESSAGE_ERROR: 'newMessageError'
+  }
 }
 
 module.exports = CONSTANTS;
