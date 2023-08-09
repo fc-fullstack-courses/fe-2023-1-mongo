@@ -30,6 +30,8 @@ httpClient.interceptors.request.use(function (config) {
     config.headers['Authorization'] = `Bearer ${token}`;
   }
 
+  config.headers['ngrok-skip-browser-warning'] = 'skip';
+
   return config;
 }, function (error) {
   // Do something with request error
