@@ -11,7 +11,9 @@ const {
   }
 } = CONSTANTS;
 
-const socket = io(WS_SERVER_URL);
+const socket = io(WS_SERVER_URL, {
+  extraHeaders: { 'ngrok-skip-browser-warning': 'skip' }
+});
 
 export const sendMessage = (message) => {
   socket.emit(NEW_MESSAGE, message);
