@@ -25,6 +25,15 @@ class MessageController {
 
     res.send({ data: messages });
   }
+
+  static async getAllMessages(req, res, next) {
+
+    const messages = await Message.find()
+      .populate({ path: 'author', select: ['id', 'firstName', 'lastName'] })
+      .select('-__v');
+
+    res.send({ data: messages });
+  }
 }
 
 module.exports = MessageController;
