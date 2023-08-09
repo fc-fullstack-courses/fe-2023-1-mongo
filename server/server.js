@@ -8,7 +8,11 @@ const { SOCKET_EVENTS: { NEW_MESSAGE, NEW_MESSAGE_ERROR } } = CONSTANTS;
 
 const server = http.createServer(app);
 
-const io = new Server(server);
+const io = new Server(server, {
+  cors: {
+    origin: '*'
+  }
+});
 
 io.on('connection', (socket) => {
   console.log('user connected');
