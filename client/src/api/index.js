@@ -39,3 +39,4 @@ httpClient.interceptors.request.use(function (config) {
 export const login = (userData) => httpClient.post('/auth/login', userData);
 export const registration = (userData) => httpClient.post('/auth/registration', userData);
 export const refresh = (token) => httpClient.post('/auth/refresh', { token });
+export const getAllMessages = (options) => httpClient.get(`/users/${options.id}/messages/all`);
