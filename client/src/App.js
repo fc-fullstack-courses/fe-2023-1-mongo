@@ -8,6 +8,7 @@ import { useDispatch } from 'react-redux';
 import { refresh } from './redux/slices/authSlice';
 import CONSTANTS from './constants';
 import ChatPage from './pages/Chat';
+import PrivateRoute from './components/PrivateRoute';
 
 function App() {
   const dispatch = useDispatch();
@@ -26,7 +27,7 @@ function App() {
         <Route exact path='/' component={HomePage} />
         <Route path='/registration' component={RegistrationPage} />
         <Route path='/login' component={LoginPage} />
-        <Route path='/chat' component={ChatPage} />
+        <PrivateRoute path='/chat' component={ChatPage} />
       </Switch>
     </Router>
   );
