@@ -20,17 +20,26 @@ const Chat = (props) => {
   const submitHandler = (values, formikBag) => {
     const newMessage = {
       ...values,
-      author: user?._id
-    }
+      author: user?._id,
+    };
 
     sendMessage(newMessage);
-    
+
     formikBag.resetForm();
   };
 
+  const chatMessages = messages.map((message) => (
+    <li key={message._id}>
+      <p>
+        <b>{`${message.author.firstName} ${message.author.lastName}`} says:</b>
+        <span>{message.body}</span>
+      </p>
+    </li>
+  ));
+
   return (
     <div>
-      <ul>{JSON.stringify(messages)}</ul>
+      <ul>{chatMessages}</ul>
       <Formik initialValues={initialValues} onSubmit={submitHandler}>
         <Form>
           <Field name='body' />
