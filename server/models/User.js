@@ -8,12 +8,10 @@ const userSchema = new Schema(
     firstName: {
       type: String,
       required: [true, 'First name is required'],
-      match: /^[A-Z][a-z]{0,32}$/,
     },
     lastName: {
       type: String,
       required: [true, 'Last name is required'],
-      match: /^[A-Z][a-z]{0,32}$/,
     },
     email: {
       type: String,
