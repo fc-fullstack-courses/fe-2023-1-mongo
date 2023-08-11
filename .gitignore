@@ -4,3 +4,4 @@ node_modules/
 # чисто для прикладу, він як раз має ігноруватися
 !.env
 !.env.example
+!.dockerignore
