@@ -1,0 +1,66 @@
+# необов'язково вказуємо версію
+version: '3.8'
+
+services:
+  # сервіс клієнту
+  client-app:
+    # для докерфайлів
+    build: 
+      context: ./client
+      dockerfile: Dockerfile-dev
+    ports:
+      - 3000:3000
+    volumes:
+      - ./client:/client
+    depends_on:
+      - backend-app
+    networks:
+      - front-net
+
+  # сервіс серверу
+  backend-app:
+    build: 
+      context: ./server
+      dockerfile: Dockerfile-dev
+    ports:
+      - 9999:5000
+    # дістати дані з файлу .env
+    env_file:
+      - ./server/.env
+    volumes:
+      - ./server:/server:ro
+    # сказати що залежимо від контейнеру монги
+    depends_on:
+      - mongo-db
+    networks:
+      - back-net
+      - front-net
+
+
+  # сервіс для монги
+  mongo-db:
+    # для образів з докерхабу
+    image: mongo:jammy
+    # прописуємо порти
+    ports:
+      - 27018:27017
+    # вказуємо змінні оточення
+    environment:
+      - MONGO_INITDB_DATABASE=dockerDb
+    # вольюмси
+    volumes:
+      - ~/Documents/fc/2023/FE-2023-1/backups/mongoChat:/data/db
+    # керування політикою рестарту контейнерів
+    restart: always
+    # кажемо до яких сіток контейнер під'єднаний
+    networks:
+      - back-net
+
+# створення своїх мережі
+networks:
+
+  front-net:
+    name: front
+
+  back-net:
+    name: back
